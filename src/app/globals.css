@@ -1,0 +1,7 @@
+/* agapps.eu basic template */
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-dm-sans);
+  --color-brand: #0070f3;
+}
