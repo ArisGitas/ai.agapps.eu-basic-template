@@ -10,6 +10,11 @@
     "file": "src/app/page.tsx",
     "order": ["header", "hero", "services", "about", "cta", "footer"]
   },
+  "assets": {
+    "imagesDir": "public/images",
+    "urlPrefix": "/images/",
+    "note": "Files in public/images are served from site root (public/images/foo.jpg -> /images/foo.jpg). No component currently reads from this folder — see public/images/README.md and AboutSection.tsx's placeholder div, the first candidate to wire up to a real image."
+  },
   "brand": {
     "name": {
       "value": "Η Εταιρεία Μας",
