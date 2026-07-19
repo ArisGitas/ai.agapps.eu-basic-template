@@ -8,17 +8,17 @@ const highlights = [
 
 export function AboutSection() {
   return (
-    <section id="about" className="bg-white py-20">
+    <section id="about" data-section="about" className="bg-white py-20">
       <Container>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <span className="inline-block text-sm font-semibold text-[#0070f3] mb-4">
               Σχετικά με εμάς
             </span>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            <h2 data-role="title" className="text-3xl font-bold text-gray-900 mb-6">
               Χρόνια εμπειρίας στην υπηρεσία σας
             </h2>
-            <p className="text-gray-500 leading-relaxed mb-4">
+            <p data-role="subtitle" className="text-gray-500 leading-relaxed mb-4">
               Είμαστε μια ομάδα επαγγελματιών με πάθος για την ποιότητα και τα αποτελέσματα.
               Από το 2010, εξυπηρετούμε εκατοντάδες επιχειρήσεις σε ολόκληρη την Ελλάδα.
             </p>

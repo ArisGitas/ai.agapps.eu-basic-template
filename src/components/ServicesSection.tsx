@@ -26,11 +26,11 @@ const services = [
 
 export function ServicesSection() {
   return (
-    <section id="services" className="bg-gray-50 py-20">
+    <section id="services" data-section="services" className="bg-gray-50 py-20">
       <Container>
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Οι Υπηρεσίες μας</h2>
-          <p className="text-gray-500 max-w-xl mx-auto">
+          <h2 data-role="title" className="text-3xl font-bold text-gray-900 mb-4">Οι Υπηρεσίες μας</h2>
+          <p data-role="subtitle" className="text-gray-500 max-w-xl mx-auto">
             Προσφέρουμε ολοκληρωμένες λύσεις για κάθε ανάγκη της επιχείρησής σας.
           </p>
         </div>
@@ -38,6 +38,7 @@ export function ServicesSection() {
           {services.map((service) => (
             <div
               key={service.title}
+              data-role="service-item"
               className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="w-12 h-12 bg-blue-50 text-[#0070f3] rounded-lg flex items-center justify-center mb-4">
@@ -45,8 +46,8 @@ export function ServicesSection() {
                   {service.icon}
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{service.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">{service.description}</p>
+              <h3 data-role="item-title" className="text-lg font-semibold text-gray-900 mb-2">{service.title}</h3>
+              <p data-role="item-description" className="text-gray-500 text-sm leading-relaxed">{service.description}</p>
             </div>
           ))}
         </div>

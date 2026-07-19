@@ -1,0 +1,139 @@
+{
+  "$schema_note": "Machine-readable map of this template for AI agents customizing it per client. Keep in sync with data-section/data-role attributes in src/components/*.tsx — if you add, remove, or rename a section/role in the code, update this file in the same change.",
+  "framework": "Next.js (App Router) + Tailwind CSS v4",
+  "locale": {
+    "lang": "el",
+    "note": "All visible copy is Greek. html lang is set in src/app/layout.tsx."
+  },
+  "font": "DM Sans, loaded via next/font/google in src/app/layout.tsx",
+  "pageComposition": {
+    "file": "src/app/page.tsx",
+    "order": ["header", "hero", "services", "about", "cta", "footer"]
+  },
+  "brand": {
+    "name": {
+      "value": "Η Εταιρεία Μας",
+      "locations": [
+        "src/components/Header.tsx (logo)",
+        "src/components/Footer.tsx (logo + copyright line)",
+        "src/app/layout.tsx (metadata.title)"
+      ],
+      "note": "Hardcoded in three places, not a shared constant. Update all three for a client rebrand."
+    },
+    "color": {
+      "token": "--color-brand defined in src/app/globals.css (@theme inline), value #0070f3",
+      "status": "NOT WIRED UP — no component actually uses the brand-* utility classes. Every component hardcodes the literal arbitrary value text-[#0070f3] / bg-[#0070f3] instead.",
+      "literalLocations": [
+        "src/app/globals.css",
+        "src/components/Header.tsx",
+        "src/components/HeroSection.tsx",
+        "src/components/ServicesSection.tsx",
+        "src/components/AboutSection.tsx",
+        "src/components/CTASection.tsx"
+      ],
+      "note": "A full brand-color change currently requires a literal find/replace of '#0070f3' across all files listed above, not just an edit to globals.css."
+    },
+    "contactInfo": {
+      "email": "info@example.com",
+      "phone": "+30 210 123 4567",
+      "address": "Αθήνα, Ελλάδα",
+      "locations": [
+        "src/components/CTASection.tsx (email + phone, as mailto:/tel: links)",
+        "src/components/Footer.tsx (email + phone + address, as plain text)"
+      ]
+    }
+  },
+  "scrollAnchors": {
+    "note": "Section ids are targeted by nav hrefs (#id). If a section's id changes, update every href that points to it.",
+    "about": { "id": "about", "definedIn": "src/components/AboutSection.tsx", "linkedFrom": ["Header.tsx nav", "Footer.tsx nav"] },
+    "services": { "id": "services", "definedIn": "src/components/ServicesSection.tsx", "linkedFrom": ["Header.tsx nav", "Footer.tsx nav", "HeroSection.tsx secondary CTA"] },
+    "contact": { "id": "contact", "definedIn": "src/components/CTASection.tsx", "linkedFrom": ["Header.tsx nav + CTA buttons", "Footer.tsx nav", "HeroSection.tsx primary CTA"] }
+  },
+  "roleNamingConvention": "data-role values describe FUNCTION, not location, and are reused across sections/components by design (e.g. multiple elements can share data-role=\"nav-link\" or data-role=\"contact-button\"). Always scope a data-role lookup within its nearest data-section ancestor.",
+  "sections": {
+    "header": {
+      "file": "src/components/Header.tsx",
+      "shared": true,
+      "note": "Rendered once in page.tsx, outside <main>. Client component (has mobile menu state).",
+      "roles": {
+        "logo": "Link to '/' showing the brand name",
+        "nav-link": "One per navLinks entry; rendered TWICE (desktop nav + mobile dropdown), each occurrence tagged",
+        "contact-button": "Link to #contact; rendered TWICE (desktop pill button + mobile dropdown link)",
+        "menu-toggle": "Mobile hamburger button, no href, toggles the dropdown"
+      },
+      "contentArrays": {
+        "navLinks": {
+          "definedAt": "top of file",
+          "shape": "{ label: string, href: string }[]",
+          "currentItems": 3
+        }
+      }
+    },
+    "hero": {
+      "file": "src/components/HeroSection.tsx",
+      "roles": {
+        "title": "h1 headline",
+        "subtitle": "p supporting copy under the headline",
+        "contact-button": "Primary CTA, links to #contact",
+        "cta-button": "Secondary CTA, links to #services"
+      }
+    },
+    "services": {
+      "file": "src/components/ServicesSection.tsx",
+      "roles": {
+        "title": "Section heading",
+        "subtitle": "Section intro paragraph",
+        "service-item": "Card wrapper, one per services[] entry",
+        "item-title": "Card heading, inside each service-item",
+        "item-description": "Card body text, inside each service-item"
+      },
+      "contentArrays": {
+        "services": {
+          "definedAt": "top of file",
+          "shape": "{ title: string, description: string, icon: JSX <path> element }[]",
+          "currentItems": 3
+        }
+      }
+    },
+    "about": {
+      "file": "src/components/AboutSection.tsx",
+      "roles": {
+        "title": "h2 heading",
+        "subtitle": "First supporting paragraph only"
+      },
+      "untaggedContent": {
+        "eyebrow span": "Small label above the heading ('Σχετικά με εμάς'), no enumerated role fits it",
+        "second paragraph": "Additional body copy after the subtitle paragraph",
+        "highlights list": "highlights: string[] const at top of file, rendered as <li> items, not individually tagged",
+        "image placeholder div": "Marked in-code with a comment to replace with next/image when a real photo exists"
+      }
+    },
+    "cta": {
+      "file": "src/components/CTASection.tsx",
+      "note": "This is the id=\"contact\" section — the template's 'contact' section is named cta, not contact, in data-section.",
+      "roles": {
+        "title": "h2 heading",
+        "subtitle": "Supporting paragraph",
+        "email-link": "mailto: link",
+        "phone-link": "tel: link"
+      }
+    },
+    "footer": {
+      "file": "src/components/Footer.tsx",
+      "shared": true,
+      "note": "Rendered once in page.tsx, after <main>.",
+      "roles": {
+        "logo": "Brand name span (not a link, unlike the header logo)",
+        "nav-link": "3 hardcoded <a> tags (not array-driven, unlike Header's navLinks)",
+        "email-link": "Plain text <p>, not an actual mailto: anchor",
+        "phone-link": "Plain text <p>, not an actual tel: anchor",
+        "address": "Plain text <p>"
+      },
+      "untaggedContent": {
+        "tagline paragraph": "Short description under the logo",
+        "copyright line": "Auto-generates the year via new Date().getFullYear()",
+        "'Powered by agapps.eu' credit link": "Template attribution, not client content — generally leave this untouched when customizing for a client"
+      }
+    }
+  }
+}
