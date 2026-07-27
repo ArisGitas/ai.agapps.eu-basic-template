@@ -19,3 +19,22 @@ Structured map of every section: its file path, its `data-role`s, any content ar
 - Section anchors (`#about`, `#services`, `#contact`) are targeted by nav `href`s in both Header and Footer — if you rename an id, update every link pointing to it.
 
 **Keep the manifest in sync**: if you add, remove, or rename a `data-section`/`data-role` or a content array's shape, update `agent.manifest.json` in the same change. A stale manifest is worse than no manifest.
+
+## 3. Stack facts — this is App Router, not Pages Router
+
+Next.js 16 App Router, React 19, Tailwind v4. There is **no `src/pages/` directory, no `_app.tsx`/`_document.tsx`, and no `i18n` block in `next.config.ts`** — those are Pages Router concepts and do nothing here. Routes live under `src/app/`; the homepage is `src/app/page.tsx`, the root wrapper is `src/app/layout.tsx`. Every section component in `src/components/` is a **client component** (`"use client"`) because each reads the language dictionary via `useT()` (see §4). `page.tsx`, `layout.tsx`, and `Container.tsx` stay Server Components. A component must be marked `"use client"` before it can use React state, effects, context, or DOM event handlers.
+
+## 4. Bilingual (i18n) — how this template works
+
+This template is **bilingual**: base language **English (`en`)**, secondary **Greek (`el`)**. All visible copy lives in one dictionary and every component reads from it — do NOT hardcode visible text back into the JSX.
+
+- **`src/lib/i18n.tsx`** — the whole i18n system: a `translations = { en: {…}, el: {…} }` object (one key per visible string, both languages filled), a `LanguageProvider` (defaults to `en`, persists the choice to `localStorage`, updates `<html lang>`), and the `useT()` hook returning `{ lang, setLang, t }`.
+- **`src/app/layout.tsx`** wraps everything in `<LanguageProvider>` and sets `<html lang="en">` + English metadata title.
+- **`Header.tsx`** renders the language switcher (`data-role="lang-switch"`, `EN | EL`).
+- Components render text with `t("some.key")`, never a literal string.
+
+**To change or add copy:** edit the value in `src/lib/i18n.tsx` for **both** `en` and `el` — never edit the JSX to hardcode a string, that breaks the other language. Keys are content arrays too: `Header`/`Footer` nav use `labelKey`, `ServicesSection` uses `titleKey`/`descKey`, `AboutSection` uses `highlightKeys`.
+
+**To add a third language:** add its block to `translations` in `i18n.tsx` (same keys) and add a button for it to the switcher in `Header.tsx`.
+
+**Do not:** add an `i18n` key to `next.config.ts` (Pages Router only — silently does nothing); install `next-intl`/`next-i18next` or add `[lang]` route folders unless the client explicitly needs separate per-language URLs / SEO. When you add a new visible string, add its key to **both** languages in `i18n.tsx` (and update `agent.manifest.json` if you add a section/role).

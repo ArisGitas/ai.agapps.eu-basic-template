@@ -1,16 +1,19 @@
+"use client";
+
 import { Container } from "./Container";
+import { useT } from "@/lib/i18n";
 
 export function HeroSection() {
+  const { t } = useT();
   return (
     <section data-section="hero" className="bg-white py-24">
       <Container>
         <div className="max-w-2xl">
           <h1 data-role="title" className="text-5xl font-bold text-gray-900 leading-tight mb-6">
-            Επαγγελματικές Υπηρεσίες για την Επιχείρησή σας
+            {t("hero.title")}
           </h1>
           <p data-role="subtitle" className="text-xl text-gray-500 leading-relaxed mb-10">
-            Αξιόπιστες λύσεις, γρήγορη εκτέλεση και προσωπική εξυπηρέτηση.
-            Ανακαλύψτε πώς μπορούμε να βοηθήσουμε την επιχείρησή σας να αναπτυχθεί.
+            {t("hero.subtitle")}
           </p>
           <div className="flex flex-wrap gap-4">
             <a
@@ -18,14 +21,14 @@ export function HeroSection() {
               data-role="contact-button"
               className="px-6 py-3 bg-[#0070f3] text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-lg shadow-blue-600/20"
             >
-              Επικοινωνήστε μαζί μας
+              {t("contactUs")}
             </a>
             <a
               href="#services"
               data-role="cta-button"
               className="px-6 py-3 border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors"
             >
-              Δείτε τις υπηρεσίες μας
+              {t("hero.servicesBtn")}
             </a>
           </div>
         </div>

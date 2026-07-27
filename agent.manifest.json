@@ -2,8 +2,12 @@
   "$schema_note": "Machine-readable map of this template for AI agents customizing it per client. Keep in sync with data-section/data-role attributes in src/components/*.tsx — if you add, remove, or rename a section/role in the code, update this file in the same change.",
   "framework": "Next.js (App Router) + Tailwind CSS v4",
   "locale": {
-    "lang": "el",
-    "note": "All visible copy is Greek. html lang is set in src/app/layout.tsx."
+    "lang": "en",
+    "secondary": ["el"],
+    "bilingual": true,
+    "note": "Bilingual: base language English (en), secondary Greek (el). ALL visible copy comes from the dictionary in src/lib/i18n.tsx (one key per string, both languages filled) — components read it via useT()/t('key') and are all client components. layout.tsx wraps the app in <LanguageProvider> (defaults to en, persists to localStorage, sets <html lang>). Header.tsx renders the language switcher (data-role='lang-switch').",
+    "editingCopy": "Change the value in BOTH en and el in src/lib/i18n.tsx. Never hardcode a visible string back into JSX — that breaks the other language. See AGENTS.md §4.",
+    "addingALanguage": "Add a new language block (same keys) to translations in src/lib/i18n.tsx and a button to the switcher in Header.tsx. Do NOT add an i18n block to next.config.ts (Pages Router only) or [lang] route folders unless separate per-language URLs are explicitly requested."
   },
   "font": "DM Sans, loaded via next/font/google in src/app/layout.tsx",
   "pageComposition": {
@@ -17,13 +21,12 @@
   },
   "brand": {
     "name": {
-      "value": "Η Εταιρεία Μας",
+      "value": "Our Company (en) / Η Εταιρεία Μας (el)",
       "locations": [
-        "src/components/Header.tsx (logo)",
-        "src/components/Footer.tsx (logo + copyright line)",
-        "src/app/layout.tsx (metadata.title)"
+        "src/lib/i18n.tsx (translations.en.brand + translations.el.brand) — Header logo and Footer logo/copyright read it via t('brand')",
+        "src/app/layout.tsx (metadata.title — literal 'Our Company'; metadata can't use the hook)"
       ],
-      "note": "Hardcoded in three places, not a shared constant. Update all three for a client rebrand."
+      "note": "No longer hardcoded in the components. For a rebrand, change the 'brand' key in BOTH languages in src/lib/i18n.tsx, plus the literal metadata.title in layout.tsx."
     },
     "color": {
       "token": "--color-brand defined in src/app/globals.css (@theme inline), value #0070f3",
@@ -64,12 +67,13 @@
         "logo": "Link to '/' showing the brand name",
         "nav-link": "One per navLinks entry; rendered TWICE (desktop nav + mobile dropdown), each occurrence tagged",
         "contact-button": "Link to #contact; rendered TWICE (desktop pill button + mobile dropdown link)",
-        "menu-toggle": "Mobile hamburger button, no href, toggles the dropdown"
+        "menu-toggle": "Mobile hamburger button, no href, toggles the dropdown",
+        "lang-switch": "Language toggle (EN | EL); rendered TWICE (desktop + mobile dropdown). Calls setLang from useT() in src/lib/i18n.tsx"
       },
       "contentArrays": {
         "navLinks": {
           "definedAt": "top of file",
-          "shape": "{ label: string, href: string }[]",
+          "shape": "{ labelKey: TranslationKey, href: string }[] — label comes from the dict via t(labelKey)",
           "currentItems": 3
         }
       }
@@ -95,7 +99,7 @@
       "contentArrays": {
         "services": {
           "definedAt": "top of file",
-          "shape": "{ title: string, description: string, icon: JSX <path> element }[]",
+          "shape": "{ titleKey: TranslationKey, descKey: TranslationKey, icon: JSX <path> element }[] — title/description come from the dict via t(); only the icon is inline",
           "currentItems": 3
         }
       }
@@ -107,9 +111,9 @@
         "subtitle": "First supporting paragraph only"
       },
       "untaggedContent": {
-        "eyebrow span": "Small label above the heading ('Σχετικά με εμάς'), no enumerated role fits it",
-        "second paragraph": "Additional body copy after the subtitle paragraph",
-        "highlights list": "highlights: string[] const at top of file, rendered as <li> items, not individually tagged",
+        "eyebrow span": "Small label above the heading (t('about.eyebrow')), no enumerated role fits it",
+        "second paragraph": "Additional body copy after the subtitle paragraph (t('about.p2'))",
+        "highlights list": "highlightKeys: TranslationKey[] const at top of file, rendered as <li> items via t(key), not individually tagged",
         "image placeholder div": "Marked in-code with a comment to replace with next/image when a real photo exists"
       }
     },

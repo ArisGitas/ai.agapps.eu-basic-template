@@ -3,14 +3,38 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Container } from "./Container";
+import { useT, type Lang, type TranslationKey } from "@/lib/i18n";
 
-const navLinks = [
-  { label: "Υπηρεσίες", href: "#services" },
-  { label: "Σχετικά", href: "#about" },
-  { label: "Επικοινωνία", href: "#contact" },
+const navLinks: { labelKey: TranslationKey; href: string }[] = [
+  { labelKey: "nav.services", href: "#services" },
+  { labelKey: "nav.about", href: "#about" },
+  { labelKey: "nav.contact", href: "#contact" },
 ];
 
+function LanguageSwitch() {
+  const { lang, setLang } = useT();
+  const langs: Lang[] = ["en", "el"];
+  return (
+    <div data-role="lang-switch" className="flex items-center gap-1 text-xs font-semibold">
+      {langs.map((l, i) => (
+        <span key={l} className="flex items-center gap-1">
+          {i > 0 && <span className="text-gray-300">|</span>}
+          <button
+            type="button"
+            onClick={() => setLang(l)}
+            aria-pressed={lang === l}
+            className={lang === l ? "text-[#0070f3]" : "text-gray-400 hover:text-gray-600 transition-colors"}
+          >
+            {l.toUpperCase()}
+          </button>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function Header() {
+  const { t } = useT();
   const [open, setOpen] = useState(false);
 
   return (
@@ -18,7 +42,7 @@ export function Header() {
       <Container>
         <div className="flex items-center justify-between h-16">
           <Link href="/" data-role="logo" className="text-xl font-bold text-gray-900 tracking-tight">
-            Η Εταιρεία Μας
+            {t("brand")}
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -29,18 +53,21 @@ export function Header() {
                 data-role="nav-link"
                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
               >
-                {link.label}
+                {t(link.labelKey)}
               </a>
             ))}
           </nav>
 
-          <a
-            href="#contact"
-            data-role="contact-button"
-            className="hidden md:inline-flex px-4 py-2 text-sm font-semibold bg-[#0070f3] text-white rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Επικοινωνήστε μαζί μας
-          </a>
+          <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitch />
+            <a
+              href="#contact"
+              data-role="contact-button"
+              className="inline-flex px-4 py-2 text-sm font-semibold bg-[#0070f3] text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              {t("contactUs")}
+            </a>
+          </div>
 
           <button
             className="md:hidden p-2 text-gray-600"
@@ -68,7 +95,7 @@ export function Header() {
                 data-role="nav-link"
                 className="block text-sm font-medium text-gray-600 hover:text-gray-900 py-1"
               >
-                {link.label}
+                {t(link.labelKey)}
               </a>
             ))}
             <a
@@ -77,8 +104,11 @@ export function Header() {
               data-role="contact-button"
               className="block text-sm font-semibold text-[#0070f3] py-1"
             >
-              Επικοινωνήστε μαζί μας →
+              {t("contactUs")} →
             </a>
+            <div className="pt-1">
+              <LanguageSwitch />
+            </div>
           </div>
         )}
       </Container>
