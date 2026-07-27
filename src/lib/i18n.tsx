@@ -5,7 +5,7 @@
 // applied to <html lang>. See AGENTS.md §4 for how this is wired and how to
 // add/translate copy. One key per visible string - keep BOTH languages filled.
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useSyncExternalStore, type ReactNode } from "react";
 
 export type Lang = "en" | "el";
 
@@ -100,35 +100,51 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
+// The chosen language lives in localStorage, read through useSyncExternalStore
+// so the server always renders the base language ("en") and the client
+// reconciles to the saved choice on hydration with no mismatch and no
+// setState-in-effect. Same-tab writes notify subscribers manually (the
+// "storage" event only fires in OTHER tabs).
 const STORAGE_KEY = "site-lang";
+const listeners = new Set<() => void>();
+
+function readLang(): Lang {
+  try {
+    const v = window.localStorage.getItem(STORAGE_KEY);
+    return v === "en" || v === "el" ? v : "en";
+  } catch {
+    return "en";
+  }
+}
+
+function writeLang(next: Lang) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next);
+  } catch {
+    // localStorage unavailable (private mode) - the choice just won't persist.
+  }
+  listeners.forEach((fn) => fn());
+}
+
+function subscribe(cb: () => void) {
+  listeners.add(cb);
+  window.addEventListener("storage", cb);
+  return () => {
+    listeners.delete(cb);
+    window.removeEventListener("storage", cb);
+  };
+}
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Always start on the base language so server and first client render match;
-  // the saved choice is applied right after mount (below), avoiding a
-  // hydration mismatch.
-  const [lang, setLangState] = useState<Lang>("en");
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved === "en" || saved === "el") setLangState(saved);
-  }, []);
+  const lang = useSyncExternalStore<Lang>(subscribe, readLang, () => "en");
 
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  function setLang(next: Lang) {
-    setLangState(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // localStorage unavailable (private mode) - the choice just won't persist.
-    }
-  }
-
   const t = (key: TranslationKey): string => translations[lang][key] ?? translations.en[key] ?? key;
 
-  return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
+  return <LanguageContext.Provider value={{ lang, setLang: writeLang, t }}>{children}</LanguageContext.Provider>;
 }
 
 export function useT(): LanguageContextValue {

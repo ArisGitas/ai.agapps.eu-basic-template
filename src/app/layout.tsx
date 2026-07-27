@@ -5,7 +5,7 @@ import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n";
 
 const dmSans = DM_Sans({
-  subsets: ["latin", "latin-ext", "greek"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-dm-sans",
   display: "swap",
 });
