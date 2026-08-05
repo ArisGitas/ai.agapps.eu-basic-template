@@ -38,3 +38,10 @@ This template is **bilingual**: base language **English (`en`)**, secondary **Gr
 **To add a third language:** add its block to `translations` in `i18n.tsx` (same keys) and add a button for it to the switcher in `Header.tsx`.
 
 **Do not:** add an `i18n` key to `next.config.ts` (Pages Router only — silently does nothing); install `next-intl`/`next-i18next` or add `[lang]` route folders unless the client explicitly needs separate per-language URLs / SEO. When you add a new visible string, add its key to **both** languages in `i18n.tsx` (and update `agent.manifest.json` if you add a section/role).
+
+<!-- This file is read directly by the AgApps platform's own site-editing AI
+     (see ai.agapps.eu's prompts/system.ts) on every customer site cloned from
+     this template - keep it scoped to facts about THIS template's code only.
+     Instructions for a coding assistant (Claude Code, Cursor, ...) working on
+     this template repo itself belong in CLAUDE.md + .ai/, never here - the
+     runtime AI has no tools to act on them and no benefit from reading them. -->

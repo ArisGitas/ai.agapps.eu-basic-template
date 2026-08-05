@@ -1,0 +1,32 @@
+---
+description: AI Operating System — how to work in this repository
+alwaysApply: true
+---
+
+# AI Operating System
+
+This repository has a rule set and project knowledge base under `.ai/`.
+
+**Every session, before your first action:**
+
+1. Read `.ai/AI_OPERATING_SYSTEM.md` in full — short by design, required.
+2. Read `.ai/STATUS.md` — what is already known and verified here.
+3. Load only the further `.ai/` files your task needs (routing table in
+   `AI_OPERATING_SYSTEM.md` §4). Do not read all of `.ai/`.
+
+If `.ai/STATUS.md` says `initialized: false`, follow `.ai/PROJECT_INIT.md`.
+
+**Core rules (full text in `.ai/AI_OPERATING_SYSTEM.md` §3):**
+
+- Verify, never assume — read the real file before describing it.
+- Your training data is stale; check versions against this repo's lockfile.
+- "I don't know" is valid. Never invent paths, functions, commands, or reasons.
+- Never claim done without running this project's real verification commands
+  (`.ai/knowledge/DEVELOPMENT_WORKFLOW.md`). If you could not run them, say so.
+- Follow existing patterns; announce and justify a new one before building it.
+- Stay in scope — report unrelated issues rather than fixing them silently.
+- Stop and ask before irreversible or outward-facing actions.
+- Never write secret values anywhere that persists.
+
+Task loop: `.ai/TASK_PROTOCOL.md` —
+understand → locate → plan → change → verify → report → remember.
