@@ -1,9 +1,9 @@
 ---
 type: core
 always_read: true
-initialized: false
-project_name: <not set>
-last_full_review: never
+initialized: true
+project_name: agapps.eu basic template (ai.agapps.eu-basic-template)
+last_full_review: 2026-08-05
 ---
 
 # Status
@@ -17,14 +17,11 @@ last_full_review: never
 
 ## Is this project initialized?
 
-**No.** `initialized: false` in the frontmatter above.
-
-→ Run `PROJECT_INIT.md` before doing substantial work, or, if the human asked
-for something small and urgent, do that first and then say the knowledge base
-is uninitialized and offer to run init.
-
-Once init is done: set `initialized: true`, fill in `project_name`, and update
-the table below.
+**Yes.** Initialized 2026-08-05 — full `PROJECT_INIT.md` pass against
+the real, small (11 source file) codebase. Two questions from
+"Before you start" were not asked interactively this pass (the human's
+actual request was "set up `.ai/` and fix the AGENTS.md contamination
+issue," not a fresh init conversation) — see Known gaps below.
 
 ## Knowledge coverage
 
@@ -34,21 +31,21 @@ last edited the file.
 
 | File | Tier | Status | Last verified |
 |---|---|---|---|
-| `knowledge/PROJECT_OVERVIEW.md` | 1 | template | never |
-| `knowledge/MODULE_MAP.md` | 1 | template | never |
-| `knowledge/DEVELOPMENT_WORKFLOW.md` | 1 | template | never |
-| `knowledge/SYSTEM_ARCHITECTURE.md` | 2 | template | never |
-| `knowledge/CODING_STANDARDS.md` | 2 | template | never |
-| `knowledge/DESIGN_PATTERNS.md` | 2 | template | never |
-| `knowledge/TESTING_STRATEGY.md` | 2 | template | never |
-| `knowledge/DATA_FLOW.md` | 2 | template | never |
-| `knowledge/API_STRUCTURE.md` | 3 | template | never |
-| `knowledge/DATABASE_STRUCTURE.md` | 3 | template | never |
-| `knowledge/INTEGRATIONS.md` | 3 | template | never |
-| `knowledge/SECURITY_RULES.md` | 3 | template | never |
-| `knowledge/DEPENDENCY_RULES.md` | 3 | template | never |
-| `knowledge/PERFORMANCE_NOTES.md` | 4 | template | never |
-| `knowledge/COMMON_MISTAKES.md` | 4 | template | never |
+| `knowledge/PROJECT_OVERVIEW.md` | 1 | filled | 2026-08-05 |
+| `knowledge/MODULE_MAP.md` | 1 | filled | 2026-08-05 |
+| `knowledge/DEVELOPMENT_WORKFLOW.md` | 1 | filled | 2026-08-05 |
+| `knowledge/SYSTEM_ARCHITECTURE.md` | 2 | filled | 2026-08-05 |
+| `knowledge/CODING_STANDARDS.md` | 2 | filled | 2026-08-05 |
+| `knowledge/DESIGN_PATTERNS.md` | 2 | filled | 2026-08-05 |
+| `knowledge/TESTING_STRATEGY.md` | 2 | filled | 2026-08-05 |
+| `knowledge/DATA_FLOW.md` | 2 | filled | 2026-08-05 |
+| `knowledge/API_STRUCTURE.md` | 3 | not applicable | 2026-08-05 |
+| `knowledge/DATABASE_STRUCTURE.md` | 3 | not applicable | 2026-08-05 |
+| `knowledge/INTEGRATIONS.md` | 3 | not applicable | 2026-08-05 |
+| `knowledge/SECURITY_RULES.md` | 3 | filled | 2026-08-05 |
+| `knowledge/DEPENDENCY_RULES.md` | 3 | filled | 2026-08-05 |
+| `knowledge/PERFORMANCE_NOTES.md` | 4 | template | 2026-08-05 |
+| `knowledge/COMMON_MISTAKES.md` | 4 | filled | 2026-08-05 |
 
 **Tiers** — how much of this to fill in, and when:
 
@@ -69,10 +66,10 @@ that this project genuinely has no such thing).
 
 | File | Entries | Notes |
 |---|---|---|
-| `decisions/ARCHITECTURE_DECISIONS.md` | 0 | |
-| `failures/LESSONS_LEARNED.md` | 0 | |
-| `history/AI_CHANGE_HISTORY.md` | 0 | |
-| `examples/` | 0 | |
+| `decisions/ARCHITECTURE_DECISIONS.md` | 1 | Why the `.ai/` loader lives in `CLAUDE.md`, not `AGENTS.md`, in this repo specifically |
+| `failures/LESSONS_LEARNED.md` | 1 | The AGENTS.md-contamination incident this init pass fixed |
+| `history/AI_CHANGE_HISTORY.md` | 0 | Not backfilled — starts empty from here forward |
+| `examples/` | 1 (FEATURE_EXAMPLES) | Bilingual i18n system. API/SERVICE/DATABASE/INTEGRATION marked not applicable (none exist); REFACTORING has no real refactor yet |
 
 ## Known gaps and open questions
 
@@ -80,7 +77,28 @@ that this project genuinely has no such thing).
 > claims that could not be verified, questions waiting on the human. Being
 > explicit here is what stops the next agent from confidently guessing.
 
-- (none recorded yet)
+- **`PROJECT_INIT.md`'s two opening questions were not asked
+  interactively** ("anything not visible in the code?" / "anything to
+  never do here?") — this init ran as part of a request to fix a
+  specific problem (AGENTS.md contamination) rather than a from-scratch
+  init conversation. `PROJECT_OVERVIEW.md`'s "Non-negotiable operating
+  constraints" section is derived from what's independently verifiable
+  (the parent repo's `prompts/system.ts`), not from a direct human
+  answer. Ask if a future session has the chance to.
+- **How the live Railway preview
+  (`aiagappseu-basic-tamplate-production.up.railway.app`, referenced
+  from the parent Hub's `src/lib/templates.ts`) actually stays in sync
+  with this repo** — not confirmed from this local clone alone (likely
+  a Railway auto-deploy hook on `origin`, unconfirmed).
+- ~~`.cursor/rules/ai-operating-system.mdc` and
+  `.github/copilot-instructions.md` not yet read in full~~ — verified:
+  both independently point straight at `.ai/` (never through `AGENTS.md`),
+  so Cursor and Copilot are unaffected by the `AGENTS.md` issue and
+  needed no changes.
+- **This template's own live Git remote (`ArisGitas/ai.agapps.eu-basic-template`)
+  had uncommitted changes (`.ai/`, `.cursor/`, `.github/`, modified
+  `AGENTS.md`, new `CLAUDE.md`) at the time of this init** — nothing in
+  this pass was committed/pushed; that remains a human decision.
 
 ## Review cadence
 

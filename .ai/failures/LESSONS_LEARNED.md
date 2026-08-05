@@ -1,10 +1,8 @@
 # Lessons Learned
 
-> TEMPLATE — a real-incident log for this project. Each entry: what
-> broke, the real root cause, the real fix, and the general shape to
-> recognize if it's about to happen again. Never invent an incident —
-> this file starts empty and grows only from real problems actually
-> encountered and solved in this project.
+> Real incidents in this project's history. Each entry: what broke, the
+> real root cause, the real fix, and the general shape to recognize if
+> it's about to happen again. Fast-scan index: `../knowledge/COMMON_MISTAKES.md`.
 
 ## How to add an entry
 

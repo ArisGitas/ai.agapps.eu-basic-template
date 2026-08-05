@@ -1,9 +1,6 @@
 # Architecture Decisions Log
 
-> TEMPLATE — empty until real decisions are recorded. Follows the format
-> in `DECISION_TEMPLATE.md`. Ordered newest first. Every entry must
-> describe a real decision made in this project — never a hypothetical
-> or generic architectural principle.
+> Real ADRs for this project, newest first. Format in `DECISION_TEMPLATE.md`.
 
 ## The `.ai/` operating-system loader lives only in `CLAUDE.md`, never in `AGENTS.md` {#ai-os-loader-not-in-agents-md}
 
