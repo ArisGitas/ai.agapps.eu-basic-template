@@ -55,3 +55,16 @@ whether `AGENTS.md` can safely carry the `.ai/` loader again. Any future
 `.ai/`-template installer run against this repo (or any other site
 template) must re-apply this same split manually — it is not something
 the generic installer knows to do on its own.
+
+**Addendum (2026-08-07)**: with Claude Code confirmed as the only coding
+tool used on this repo going forward, `CLAUDE.md` was rewritten from a
+thin `.ai/` re-export into a real, dense "quick facts" file (stack table,
+verification commands, the AGENTS.md-dual-audience rule above, and the
+top verified gotchas from `PROJECT_OVERVIEW.md`) with the original
+`.ai/` loader block kept below it, unchanged and still machine-managed
+(`<!-- AI-OS:BEGIN/END -->`). Rationale: CLAUDE.md is read on every
+Claude Code session regardless of task, so the highest-value facts
+belong there directly instead of costing a tool call into `.ai/` for
+things a trivial task never otherwise needs to look up. `.cursor/rules/`
+and `.github/copilot-instructions.md` were left untouched - they still
+work and aren't the primary target, but nothing about them is broken.

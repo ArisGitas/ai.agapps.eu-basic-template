@@ -39,6 +39,8 @@ This template is **bilingual**: base language **English (`en`)**, secondary **Gr
 
 **Do not:** add an `i18n` key to `next.config.ts` (Pages Router only — silently does nothing); install `next-intl`/`next-i18next` or add `[lang]` route folders unless the client explicitly needs separate per-language URLs / SEO. When you add a new visible string, add its key to **both** languages in `i18n.tsx` (and update `agent.manifest.json` if you add a section/role).
 
+**Adding a brand-new page (e.g. Terms/Privacy) is the same rule, not an exception.** A whole new route still goes through `i18n.tsx` in both `en` and `el` — write it directly in JSX in whichever language the request happened to be phrased in, and you've broken the site for the other language. This applies **regardless of what language the customer's own chat instruction was written in** — a Greek instruction does not mean the new page should be Greek; check `layout.tsx`'s default (`en`) and the existing pages, not the instruction's language.
+
 <!-- This file is read directly by the AgApps platform's own site-editing AI
      (see ai.agapps.eu's prompts/system.ts) on every customer site cloned from
      this template - keep it scoped to facts about THIS template's code only.
