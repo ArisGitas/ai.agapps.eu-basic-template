@@ -2,6 +2,35 @@
 
 > Real ADRs for this project, newest first. Format in `DECISION_TEMPLATE.md`.
 
+## The template is a static export (`output: 'export'`) {#static-export}
+
+**Date**: 2026-08-11
+
+**Decision**: `next.config.ts` sets `output: 'export'` +
+`images: { unoptimized: true }` + `trailingSlash: true`. Every site
+cloned from this template builds to a plain `out/` directory of
+HTML/CSS/JS — there is no Node server at runtime. `AGENTS.md` §5 ("Static
+site — hard constraints") encodes the two rules that keep this valid: no
+server-side code (API routes, server actions, `middleware.ts`,
+server-side data fetch — these *fail the build* under `output:'export'`)
+and no runtime outbound calls from the page (Google Fonts/CDN `<link>`s,
+hot-linked images, third-party analytics beacons).
+
+**Reason**: hosting is the dominant per-site cost on the Hub (~€6/mo of
+always-on container vs. cents of AI). Static export lets Railway
+(Railpack) serve `out/` via Caddy and lets the origin container **sleep**
+(Railway Serverless) when idle — sleep is triggered by absence of
+*outbound* traffic, which a truly static site never produces. So the
+export is what actually makes sleep work; a stray Google Fonts `<link>`
+or an image optimizer (which runs server-side) would keep the container
+awake 24/7. Verified 2026-08-11: `next build` emits `out/` with
+`index.html` + `404.html` and no external font links (`next/font`
+self-hosts DM Sans at build time). Serving is zero-config — Railpack
+detects `output:'export'` and serves it, no start-command change (per
+Railpack docs). The Hub also exposes a per-site static toggle in
+`/ag-admin` that can flip an individual site off this, but static is the
+default and the intended mode.
+
 ## The `.ai/` operating-system loader lives only in `CLAUDE.md`, never in `AGENTS.md` {#ai-os-loader-not-in-agents-md}
 
 **Date**: 2026-08-05
