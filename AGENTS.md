@@ -20,11 +20,54 @@ Structured map of every section: its file path, its `data-role`s, any content ar
 
 **Keep the manifest in sync**: if you add, remove, or rename a `data-section`/`data-role` or a content array's shape, update `agent.manifest.json` in the same change. A stale manifest is worse than no manifest.
 
-## 3. Stack facts — this is App Router, not Pages Router
+## 3. `data-agapps-id` attributes (2026-08-12, for the AgApps Studio visual editor)
 
-Next.js 16 App Router, React 19, Tailwind v4. There is **no `src/pages/` directory, no `_app.tsx`/`_document.tsx`, and no `i18n` block in `next.config.ts`** — those are Pages Router concepts and do nothing here. Routes live under `src/app/`; the homepage is `src/app/page.tsx`, the root wrapper is `src/app/layout.tsx`. Every section component in `src/components/` is a **client component** (`"use client"`) because each reads the language dictionary via `useT()` (see §4). `page.tsx`, `layout.tsx`, and `Container.tsx` stay Server Components. A component must be marked `"use client"` before it can use React state, effects, context, or DOM event handlers.
+Every editable element (headings, body text, buttons, links, images, and
+each section's root/container) also carries a `data-agapps-id="<name>"`
+attribute — e.g. `hero-title`, `hero-cta-primary`, `about-body`,
+`footer-copyright`. This is a **separate system from `data-section`/
+`data-role` above** (§1) — it complements it, doesn't replace it. Both
+sets of attributes must stay on the same elements.
 
-## 4. Bilingual (i18n) — how this template works
+- **Purpose**: `data-section`/`data-role` locate an element for *you* (the
+  AI) to read/reason about. `data-agapps-id` is what the platform's
+  **non-AI visual editor** uses to target one exact DOM node for a
+  deterministic patch (text/color/image/link/visibility) — it needs a
+  value that's stable and **globally unique across the whole site**,
+  which `data-role` deliberately is not (role names are intentionally
+  reused across sections).
+- **Never remove or duplicate an existing `data-agapps-id`** when editing
+  content in the same element — same rule as `data-section`/`data-role`.
+  If you rewrite a whole file with `write_file`, carry every existing
+  `data-agapps-id` over onto the same (or the closest equivalent)
+  element.
+- **When you add a brand-new editable element** (a new section, a new
+  button, a new paragraph that didn't exist before), stamp it with a
+  **new, unique** `data-agapps-id` following the same naming pattern:
+  `<section>-<what-it-is>`, kebab-case, human-readable, function-based
+  (e.g. a new testimonials section's heading → `testimonials-title`, not
+  `testimonials-h2` or a random string). Check the file (and ideally the
+  rest of the site) to make sure the name isn't already used.
+- **Elements rendered from a `.map()` over an array (or a component
+  instantiated more than once, like `LanguageSwitch` in `Header.tsx`)
+  share ONE `data-agapps-id` across every rendered instance** — the id
+  lives on the single source JSX node, not per rendered copy. Today's
+  known instances of this: `header-nav-link-desktop`/
+  `-mobile` (Header's `navLinks.map`), `header-lang-switch`/
+  `-button` (the `LanguageSwitch` component, called twice), `services-item-card`/
+  `-title`/`-description` (`ServicesSection`'s `services.map`),
+  `about-highlight-item` (`AboutSection`'s `highlightKeys.map`),
+  `footer-nav-link` (Footer's own local `navLinks.map`). The visual editor
+  cannot target "just the second card" through this id alone — editing a
+  specific rendered instance of a looped item, or reordering the loop,
+  stays an AI-chat-only operation for now, not something the visual
+  editor's v1 handles.
+
+## 4. Stack facts — this is App Router, not Pages Router
+
+Next.js 16 App Router, React 19, Tailwind v4. There is **no `src/pages/` directory, no `_app.tsx`/`_document.tsx`, and no `i18n` block in `next.config.ts`** — those are Pages Router concepts and do nothing here. Routes live under `src/app/`; the homepage is `src/app/page.tsx`, the root wrapper is `src/app/layout.tsx`. Every section component in `src/components/` is a **client component** (`"use client"`) because each reads the language dictionary via `useT()` (see §5). `page.tsx`, `layout.tsx`, and `Container.tsx` stay Server Components. A component must be marked `"use client"` before it can use React state, effects, context, or DOM event handlers.
+
+## 5. Bilingual (i18n) — how this template works
 
 This template is **bilingual**: base language **English (`en`)**, secondary **Greek (`el`)**. All visible copy lives in one dictionary and every component reads from it — do NOT hardcode visible text back into the JSX.
 
