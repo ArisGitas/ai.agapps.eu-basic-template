@@ -24,10 +24,11 @@ Structured map of every section: its file path, its `data-role`s, any content ar
 
 Every editable element (headings, body text, buttons, links, images, and
 each section's root/container) also carries a `data-agapps-id="<name>"`
-attribute — e.g. `hero-title`, `hero-cta-primary`, `about-body`,
-`footer-copyright`. This is a **separate system from `data-section`/
-`data-role` above** (§1) — it complements it, doesn't replace it. Both
-sets of attributes must stay on the same elements.
+attribute — e.g. `homepage-hero-title`, `homepage-hero-cta-primary`,
+`homepage-about-body`, `global-footer-copyright`. This is a **separate
+system from `data-section`/`data-role` above** (§1) — it complements it,
+doesn't replace it. Both sets of attributes must stay on the same
+elements.
 
 - **Purpose**: `data-section`/`data-role` locate an element for *you* (the
   AI) to read/reason about. `data-agapps-id` is what the platform's
@@ -36,32 +37,49 @@ sets of attributes must stay on the same elements.
   value that's stable and **globally unique across the whole site**,
   which `data-role` deliberately is not (role names are intentionally
   reused across sections).
+- **Naming pattern: `<scope>-<section>-<what-it-is>`**, kebab-case,
+  human-readable, function-based. `<scope>` is the page slug the
+  component only ever renders on (e.g. `homepage` for `HeroSection.tsx`,
+  `ServicesSection.tsx`, `AboutSection.tsx`, `CTASection.tsx` — all
+  imported by `src/app/page.tsx` alone today), or `global` for chrome
+  reused across every page regardless of route (`Header.tsx`,
+  `Footer.tsx`). This exists so that adding a second page later (see §5's
+  note on adding new pages, e.g. Terms/Privacy) can't produce a
+  same-named-but-different id collision — a new page's own hero-like
+  section gets its own page's scope (e.g. `about-us-hero-title`), never
+  bare `hero-title` again. **When you add a page, decide the scope first
+  and use it consistently across every new component that page alone
+  renders; when you add a new component to an existing page's component
+  set, reuse that page's existing scope.**
 - **Never remove or duplicate an existing `data-agapps-id`** when editing
   content in the same element — same rule as `data-section`/`data-role`.
   If you rewrite a whole file with `write_file`, carry every existing
   `data-agapps-id` over onto the same (or the closest equivalent)
-  element.
+  element. Never change an id's `<scope>` on an element that already has
+  one, even if the component gets reused by a second page later — treat
+  that as a sign the component should move to `global` scope, and say so
+  rather than silently guessing.
 - **When you add a brand-new editable element** (a new section, a new
   button, a new paragraph that didn't exist before), stamp it with a
-  **new, unique** `data-agapps-id` following the same naming pattern:
-  `<section>-<what-it-is>`, kebab-case, human-readable, function-based
-  (e.g. a new testimonials section's heading → `testimonials-title`, not
-  `testimonials-h2` or a random string). Check the file (and ideally the
+  **new, unique** `data-agapps-id` following the naming pattern above
+  (e.g. a new testimonials section's heading on the homepage →
+  `homepage-testimonials-title`, not `testimonials-title`,
+  `testimonials-h2`, or a random string). Check the file (and ideally the
   rest of the site) to make sure the name isn't already used.
 - **Elements rendered from a `.map()` over an array (or a component
   instantiated more than once, like `LanguageSwitch` in `Header.tsx`)
   share ONE `data-agapps-id` across every rendered instance** — the id
   lives on the single source JSX node, not per rendered copy. Today's
-  known instances of this: `header-nav-link-desktop`/
-  `-mobile` (Header's `navLinks.map`), `header-lang-switch`/
-  `-button` (the `LanguageSwitch` component, called twice), `services-item-card`/
+  known instances of this: `global-header-nav-link-desktop`/`-mobile`
+  (Header's `navLinks.map`), `global-header-lang-switch`/`-button` (the
+  `LanguageSwitch` component, called twice), `homepage-services-item-card`/
   `-title`/`-description` (`ServicesSection`'s `services.map`),
-  `about-highlight-item` (`AboutSection`'s `highlightKeys.map`),
-  `footer-nav-link` (Footer's own local `navLinks.map`). The visual editor
-  cannot target "just the second card" through this id alone — editing a
-  specific rendered instance of a looped item, or reordering the loop,
-  stays an AI-chat-only operation for now, not something the visual
-  editor's v1 handles.
+  `homepage-about-highlight-item` (`AboutSection`'s `highlightKeys.map`),
+  `global-footer-nav-link` (Footer's own local `navLinks.map`). The visual
+  editor cannot target "just the second card" through this id alone —
+  editing a specific rendered instance of a looped item, or reordering
+  the loop, stays an AI-chat-only operation for now, not something the
+  visual editor's v1 handles.
 
 ## 4. Stack facts — this is App Router, not Pages Router
 
