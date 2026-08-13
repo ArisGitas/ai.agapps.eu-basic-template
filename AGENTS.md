@@ -102,6 +102,15 @@ This template is **bilingual**: base language **English (`en`)**, secondary **Gr
 
 **Adding a brand-new page (e.g. Terms/Privacy) is the same rule, not an exception.** A whole new route still goes through `i18n.tsx` in both `en` and `el` — write it directly in JSX in whichever language the request happened to be phrased in, and you've broken the site for the other language. This applies **regardless of what language the customer's own chat instruction was written in** — a Greek instruction does not mean the new page should be Greek; check `layout.tsx`'s default (`en`) and the existing pages, not the instruction's language.
 
+## 5. Static site — hard constraints
+
+This site is a **static export** (`output: 'export'` in `next.config.ts`). `next build` produces a plain `out/` folder of HTML/CSS/JS — there is no Node server at runtime. It is hosted so the container can sleep when idle, which only holds while the site makes **zero server-side and zero runtime outbound calls**. Two rules follow, and they are hard:
+
+- **No server-side code.** Never add an API route (`app/**/route.ts`), a Server Action (`"use server"`), `middleware.ts`, `getServerSideProps`/`getStaticProps`, or any server-side data fetch. With `output: 'export'` these don't just get ignored — they **fail the build**, and the customer's site stops updating. Anything dynamic (a contact form that emails, a booking system) must come from a platform-provided skill/template, never a hand-rolled backend.
+- **No runtime outbound calls from the page.** Never add a Google Fonts / CDN `<link>` tag (fonts go through `next/font`, already self-hosted at build — see `layout.tsx`), never hot-link an external image (download it into `public/` and reference it locally), never add a third-party analytics/tracking `<script>` or beacon. A single external `<link>`/`fetch` keeps the site awake 24/7 and costs the owner money for nothing.
+
+Everything this template already does (client-side i18n via `localStorage`, `next/font`, local assets) is compatible with this. Keep it that way.
+
 <!-- This file is read directly by the AgApps platform's own site-editing AI
      (see ai.agapps.eu's prompts/system.ts) on every customer site cloned from
      this template - keep it scoped to facts about THIS template's code only.

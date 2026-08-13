@@ -66,7 +66,7 @@ that this project genuinely has no such thing).
 
 | File | Entries | Notes |
 |---|---|---|
-| `decisions/ARCHITECTURE_DECISIONS.md` | 1 | Why the `.ai/` loader lives in `CLAUDE.md`, not `AGENTS.md`, in this repo specifically |
+| `decisions/ARCHITECTURE_DECISIONS.md` | 2 | 2026-08-11 static export (`output:'export'`, for Railway sleep) · why the `.ai/` loader lives in `CLAUDE.md`, not `AGENTS.md`, in this repo |
 | `failures/LESSONS_LEARNED.md` | 1 | The AGENTS.md-contamination incident this init pass fixed |
 | `history/AI_CHANGE_HISTORY.md` | 0 | Not backfilled — starts empty from here forward |
 | `examples/` | 1 (FEATURE_EXAMPLES) | Bilingual i18n system. API/SERVICE/DATABASE/INTEGRATION marked not applicable (none exist); REFACTORING has no real refactor yet |

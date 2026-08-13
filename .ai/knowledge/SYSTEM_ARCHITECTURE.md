@@ -75,3 +75,15 @@ would behave differently under multiple instances. The `listeners` Set
 in `i18n.tsx` is **client-side, per-browser-tab** module state (each
 tab gets its own JS module instance), not server state, so it does not
 carry any horizontal-scaling risk.
+
+**Deployment mode: static export (2026-08-11).** `next.config.ts` sets
+`output: 'export'`, so `next build` emits a plain `out/` directory and
+there is no Node runtime — Railway (Railpack) serves it with Caddy and
+the origin container sleeps (Railway Serverless) when idle. This is
+*only* valid while the site makes zero server-side and zero runtime
+outbound calls (see `AGENTS.md` §5 and
+`decisions/ARCHITECTURE_DECISIONS.md#static-export`). Everything this
+template already does is compatible: `next/font` self-hosts the font at
+build time, i18n is client-side `localStorage`, all assets are local.
+Adding an API route/server action would *fail the build*; adding an
+external `<link>`/image/analytics beacon would keep the container awake.
