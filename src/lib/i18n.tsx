@@ -2,95 +2,19 @@
 
 // Bilingual support for this template. Base language is English (en); Greek
 // (el) is the secondary. A visitor's choice is remembered in localStorage and
-// applied to <html lang>. See AGENTS.md §4 for how this is wired and how to
-// add/translate copy. One key per visible string - keep BOTH languages filled.
+// applied to <html lang>. Translations live in src/content/{locale}.json (see
+// AGENTS.md §5) so the platform's visual editor can patch one language's value
+// with a minimal diff. One key per visible string - keep BOTH languages filled.
 
+import en from "@/content/en.json";
+import el from "@/content/el.json";
 import { createContext, useContext, useEffect, useSyncExternalStore, type ReactNode } from "react";
 
 export type Lang = "en" | "el";
 
-const translations = {
-  en: {
-    brand: "Our Company",
-    "nav.services": "Services",
-    "nav.about": "About",
-    "nav.contact": "Contact",
-    contactUs: "Contact us",
-    "hero.title": "Professional Services for Your Business",
-    "hero.subtitle":
-      "Reliable solutions, fast delivery, and personal service. Discover how we can help your business grow.",
-    "hero.servicesBtn": "See our services",
-    "services.title": "Our Services",
-    "services.subtitle": "We offer complete solutions for every need of your business.",
-    "services.item1.title": "Fast Delivery",
-    "services.item1.desc": "We deliver results quickly and reliably, with no delays.",
-    "services.item2.title": "Guaranteed Quality",
-    "services.item2.desc":
-      "Every project is completed to the highest standards of quality and professionalism.",
-    "services.item3.title": "Personal Service",
-    "services.item3.desc":
-      "We dedicate ourselves to each client individually to ensure their satisfaction.",
-    "about.eyebrow": "About us",
-    "about.title": "Years of experience at your service",
-    "about.p1":
-      "We are a team of professionals passionate about quality and results. Since 2010 we have served hundreds of businesses across Greece.",
-    "about.p2":
-      "Our philosophy is simple: every client deserves the best service, and every project deserves our full dedication.",
-    "about.highlight1": "100+ satisfied clients",
-    "about.highlight2": "10+ years of experience",
-    "about.highlight3": "Available 24/7 for support",
-    "about.imageAlt": "Company image",
-    "cta.title": "Ready to work together?",
-    "cta.subtitle":
-      "Contact us today and let's discuss how we can help your business grow.",
-    "cta.emailBtn": "Email us",
-    "cta.phoneBtn": "Call us",
-    "footer.tagline": "High-quality professional services for every business.",
-    "footer.address": "Athens, Greece",
-    "footer.rights": "All rights reserved.",
-  },
-  el: {
-    brand: "Η Εταιρεία Μας",
-    "nav.services": "Υπηρεσίες",
-    "nav.about": "Σχετικά",
-    "nav.contact": "Επικοινωνία",
-    contactUs: "Επικοινωνήστε μαζί μας",
-    "hero.title": "Επαγγελματικές Υπηρεσίες για την Επιχείρησή σας",
-    "hero.subtitle":
-      "Αξιόπιστες λύσεις, γρήγορη εκτέλεση και προσωπική εξυπηρέτηση. Ανακαλύψτε πώς μπορούμε να βοηθήσουμε την επιχείρησή σας να αναπτυχθεί.",
-    "hero.servicesBtn": "Δείτε τις υπηρεσίες μας",
-    "services.title": "Οι Υπηρεσίες μας",
-    "services.subtitle": "Προσφέρουμε ολοκληρωμένες λύσεις για κάθε ανάγκη της επιχείρησής σας.",
-    "services.item1.title": "Γρήγορη Εκτέλεση",
-    "services.item1.desc": "Παραδίδουμε αποτελέσματα γρήγορα και αξιόπιστα, χωρίς καθυστερήσεις.",
-    "services.item2.title": "Εγγυημένη Ποιότητα",
-    "services.item2.desc":
-      "Κάθε έργο ολοκληρώνεται με τα υψηλότερα πρότυπα ποιότητας και επαγγελματισμού.",
-    "services.item3.title": "Προσωπική Εξυπηρέτηση",
-    "services.item3.desc":
-      "Αφιερωνόμαστε σε κάθε πελάτη ξεχωριστά για να εξασφαλίσουμε την ικανοποίησή του.",
-    "about.eyebrow": "Σχετικά με εμάς",
-    "about.title": "Χρόνια εμπειρίας στην υπηρεσία σας",
-    "about.p1":
-      "Είμαστε μια ομάδα επαγγελματιών με πάθος για την ποιότητα και τα αποτελέσματα. Από το 2010, εξυπηρετούμε εκατοντάδες επιχειρήσεις σε ολόκληρη την Ελλάδα.",
-    "about.p2":
-      "Η φιλοσοφία μας είναι απλή: κάθε πελάτης αξίζει την καλύτερη εξυπηρέτηση, κάθε έργο αξίζει την πλήρη αφοσίωσή μας.",
-    "about.highlight1": "100+ ικανοποιημένοι πελάτες",
-    "about.highlight2": "10+ χρόνια εμπειρίας",
-    "about.highlight3": "Διαθέσιμοι 24/7 για υποστήριξη",
-    "about.imageAlt": "Εικόνα εταιρείας",
-    "cta.title": "Έτοιμοι να συνεργαστούμε;",
-    "cta.subtitle":
-      "Επικοινωνήστε μαζί μας σήμερα και ας συζητήσουμε πώς μπορούμε να βοηθήσουμε την επιχείρησή σας να αναπτυχθεί.",
-    "cta.emailBtn": "Στείλτε μας email",
-    "cta.phoneBtn": "Καλέστε μας",
-    "footer.tagline": "Επαγγελματικές υπηρεσίες υψηλής ποιότητας για κάθε επιχείρηση.",
-    "footer.address": "Αθήνα, Ελλάδα",
-    "footer.rights": "Όλα τα δικαιώματα διατηρούνται.",
-  },
-} as const satisfies Record<Lang, Record<string, string>>;
+const translations = { en, el };
 
-export type TranslationKey = keyof (typeof translations)["en"];
+export type TranslationKey = keyof typeof en;
 
 interface LanguageContextValue {
   lang: Lang;

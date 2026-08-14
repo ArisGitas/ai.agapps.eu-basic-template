@@ -89,18 +89,18 @@ Next.js 16 App Router, React 19, Tailwind v4. There is **no `src/pages/` directo
 
 This template is **bilingual**: base language **English (`en`)**, secondary **Greek (`el`)**. All visible copy lives in one dictionary and every component reads from it — do NOT hardcode visible text back into the JSX.
 
-- **`src/lib/i18n.tsx`** — the whole i18n system: a `translations = { en: {…}, el: {…} }` object (one key per visible string, both languages filled), a `LanguageProvider` (defaults to `en`, persists the choice to `localStorage`, updates `<html lang>`), and the `useT()` hook returning `{ lang, setLang, t }`.
+- **`src/content/en.json` / `src/content/el.json`** — the translation dictionaries (one key per visible string, both languages filled). **`src/lib/i18n.tsx`** imports them into a `translations = { en, el }` object and provides the rest of the i18n system: a `LanguageProvider` (defaults to `en`, persists the choice to `localStorage`, updates `<html lang>`), and the `useT()` hook returning `{ lang, setLang, t }`.
 - **`src/app/layout.tsx`** wraps everything in `<LanguageProvider>` and sets `<html lang="en">` + English metadata title.
 - **`Header.tsx`** renders the language switcher (`data-role="lang-switch"`, `EN | EL`).
 - Components render text with `t("some.key")`, never a literal string.
 
-**To change or add copy:** edit the value in `src/lib/i18n.tsx` for **both** `en` and `el` — never edit the JSX to hardcode a string, that breaks the other language. Keys are content arrays too: `Header`/`Footer` nav use `labelKey`, `ServicesSection` uses `titleKey`/`descKey`, `AboutSection` uses `highlightKeys`.
+**To change or add copy:** edit the value in **both** `src/content/en.json` and `src/content/el.json` — never edit the JSX to hardcode a string, that breaks the other language. Keys are content arrays too: `Header`/`Footer` nav use `labelKey`, `ServicesSection` uses `titleKey`/`descKey`, `AboutSection` uses `highlightKeys`.
 
-**To add a third language:** add its block to `translations` in `i18n.tsx` (same keys) and add a button for it to the switcher in `Header.tsx`.
+**To add a third language:** add a `src/content/{locale}.json` file (same keys), import it into the `translations` object in `i18n.tsx`, and add a button for it to the switcher in `Header.tsx`.
 
-**Do not:** add an `i18n` key to `next.config.ts` (Pages Router only — silently does nothing); install `next-intl`/`next-i18next` or add `[lang]` route folders unless the client explicitly needs separate per-language URLs / SEO. When you add a new visible string, add its key to **both** languages in `i18n.tsx` (and update `agent.manifest.json` if you add a section/role).
+**Do not:** add an `i18n` key to `next.config.ts` (Pages Router only — silently does nothing); install `next-intl`/`next-i18next` or add `[lang]` route folders unless the client explicitly needs separate per-language URLs / SEO. When you add a new visible string, add its key to **both** `src/content/en.json` and `src/content/el.json` (and update `agent.manifest.json` if you add a section/role).
 
-**Adding a brand-new page (e.g. Terms/Privacy) is the same rule, not an exception.** A whole new route still goes through `i18n.tsx` in both `en` and `el` — write it directly in JSX in whichever language the request happened to be phrased in, and you've broken the site for the other language. This applies **regardless of what language the customer's own chat instruction was written in** — a Greek instruction does not mean the new page should be Greek; check `layout.tsx`'s default (`en`) and the existing pages, not the instruction's language.
+**Adding a brand-new page (e.g. Terms/Privacy) is the same rule, not an exception.** A whole new route still goes through the JSON dictionaries in both `en` and `el` — write it directly in JSX in whichever language the request happened to be phrased in, and you've broken the site for the other language. This applies **regardless of what language the customer's own chat instruction was written in** — a Greek instruction does not mean the new page should be Greek; check `layout.tsx`'s default (`en`) and the existing pages, not the instruction's language.
 
 ## 5. Static site — hard constraints
 
