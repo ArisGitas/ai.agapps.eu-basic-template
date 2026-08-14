@@ -42,7 +42,7 @@ export function Header() {
     <header data-section="header" data-agapps-id="global-header-container" className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
       <Container>
         <div className="flex items-center justify-between h-16">
-          <Link href="/" data-role="logo" data-agapps-id="global-header-logo" className="text-xl font-bold text-gray-900 tracking-tight">
+          <Link href="/" data-role="logo" data-agapps-id="global-header-logo" data-agapps-key="brand" className="text-xl font-bold text-gray-900 tracking-tight">
             {t("brand")}
           </Link>
 
@@ -52,7 +52,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 data-role="nav-link"
-                data-agapps-id="global-header-nav-link-desktop"
+                data-agapps-id="global-header-nav-link-desktop" data-agapps-key={link.labelKey}
                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
               >
                 {t(link.labelKey)}
@@ -65,7 +65,7 @@ export function Header() {
             <a
               href="#contact"
               data-role="contact-button"
-              data-agapps-id="global-header-cta-primary"
+              data-agapps-id="global-header-cta-primary" data-agapps-key="contactUs"
               className="inline-flex px-4 py-2 text-sm font-semibold bg-[#0070f3] text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               {t("contactUs")}
@@ -97,7 +97,7 @@ export function Header() {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 data-role="nav-link"
-                data-agapps-id="global-header-nav-link-mobile"
+                data-agapps-id="global-header-nav-link-mobile" data-agapps-key={link.labelKey}
                 className="block text-sm font-medium text-gray-600 hover:text-gray-900 py-1"
               >
                 {t(link.labelKey)}

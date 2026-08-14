@@ -75,11 +75,29 @@ elements.
   `LanguageSwitch` component, called twice), `homepage-services-item-card`/
   `-title`/`-description` (`ServicesSection`'s `services.map`),
   `homepage-about-highlight-item` (`AboutSection`'s `highlightKeys.map`),
-  `global-footer-nav-link` (Footer's own local `navLinks.map`). The visual
-  editor cannot target "just the second card" through this id alone —
-  editing a specific rendered instance of a looped item, or reordering
-  the loop, stays an AI-chat-only operation for now, not something the
-  visual editor's v1 handles.
+  `global-footer-nav-link` (Footer's own local `navLinks.map`). A shared id
+  alone can't target "just the second card" — see `data-agapps-key` below
+  for how TEXT edits to looped items are resolved; reordering the loop
+  stays an AI-chat-only operation.
+
+- **`data-agapps-key` (2026-08-14) — the dictionary key behind a
+  text-editable element.** Every element whose content is a single `t(...)`
+  call carries the exact translation key it renders, so the visual editor
+  can patch the dictionary directly without ever reading the JSX:
+  `data-agapps-key="hero.title"` for a static `{t("hero.title")}`, or
+  `data-agapps-key={service.titleKey}` inside a `.map()` where the key is
+  only known at runtime. This is what unlocks editing ONE looped service
+  card's text (the key tells the editor which dictionary entry to patch —
+  `services.item2.title` for the second card, not "the second card").
+  - **Only stamp it on elements whose SOLE content is one `t(...)` call.**
+    Never stamp a wrapper/mixed element — e.g. `homepage-about-highlight-item`
+    (`{t(key)}` plus a nested checkmark `<span>`), `global-footer-copyright`
+    (two `t()` calls + a dynamic year), or `global-header-lang-switch-button`
+    (`{l.toUpperCase()}`, not a dictionary key at all) must NOT get a key.
+  - **Keep it in sync with the key it renders.** `data-agapps-key={x}` must
+    be the exact same `x` passed to `t(x)` on that element.
+  - **Preserve/stamp it** the same way as `data-agapps-id` above: never
+    remove it, and when you add a new `t(...)`-driven element, add its key.
 
 ## 4. Stack facts — this is App Router, not Pages Router
 

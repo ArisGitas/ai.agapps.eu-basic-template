@@ -12,16 +12,16 @@ export function AboutSection() {
       <Container>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <span data-agapps-id="homepage-about-eyebrow" className="inline-block text-sm font-semibold text-[#0070f3] mb-4">
+            <span data-agapps-id="homepage-about-eyebrow" data-agapps-key="about.eyebrow" className="inline-block text-sm font-semibold text-[#0070f3] mb-4">
               {t("about.eyebrow")}
             </span>
-            <h2 data-role="title" data-agapps-id="homepage-about-title" className="text-3xl font-bold text-gray-900 mb-6">
+            <h2 data-role="title" data-agapps-id="homepage-about-title" data-agapps-key="about.title" className="text-3xl font-bold text-gray-900 mb-6">
               {t("about.title")}
             </h2>
-            <p data-role="subtitle" data-agapps-id="homepage-about-subtitle" className="text-gray-500 leading-relaxed mb-4">
+            <p data-role="subtitle" data-agapps-id="homepage-about-subtitle" data-agapps-key="about.p1" className="text-gray-500 leading-relaxed mb-4">
               {t("about.p1")}
             </p>
-            <p data-agapps-id="homepage-about-body" className="text-gray-500 leading-relaxed mb-8">
+            <p data-agapps-id="homepage-about-body" data-agapps-key="about.p2" className="text-gray-500 leading-relaxed mb-8">
               {t("about.p2")}
             </p>
             <ul className="space-y-3">

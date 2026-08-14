@@ -33,8 +33,8 @@ export function ServicesSection() {
     <section id="services" data-section="services" data-agapps-id="homepage-services-container" className="bg-gray-50 py-20">
       <Container>
         <div className="text-center mb-12">
-          <h2 data-role="title" data-agapps-id="homepage-services-title" className="text-3xl font-bold text-gray-900 mb-4">{t("services.title")}</h2>
-          <p data-role="subtitle" data-agapps-id="homepage-services-subtitle" className="text-gray-500 max-w-xl mx-auto">
+          <h2 data-role="title" data-agapps-id="homepage-services-title" data-agapps-key="services.title" className="text-3xl font-bold text-gray-900 mb-4">{t("services.title")}</h2>
+          <p data-role="subtitle" data-agapps-id="homepage-services-subtitle" data-agapps-key="services.subtitle" className="text-gray-500 max-w-xl mx-auto">
             {t("services.subtitle")}
           </p>
         </div>
@@ -51,8 +51,8 @@ export function ServicesSection() {
                   {service.icon}
                 </svg>
               </div>
-              <h3 data-role="item-title" data-agapps-id="homepage-services-item-title" className="text-lg font-semibold text-gray-900 mb-2">{t(service.titleKey)}</h3>
-              <p data-role="item-description" data-agapps-id="homepage-services-item-description" className="text-gray-500 text-sm leading-relaxed">{t(service.descKey)}</p>
+              <h3 data-role="item-title" data-agapps-id="homepage-services-item-title" data-agapps-key={service.titleKey} className="text-lg font-semibold text-gray-900 mb-2">{t(service.titleKey)}</h3>
+              <p data-role="item-description" data-agapps-id="homepage-services-item-description" data-agapps-key={service.descKey} className="text-gray-500 text-sm leading-relaxed">{t(service.descKey)}</p>
             </div>
           ))}
         </div>
